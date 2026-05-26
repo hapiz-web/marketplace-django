@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="fw-bold mb-5">
+
+    Dashboard Admin
+
+</h1>
+
+<div class="row">
+
+    <!-- TOTAL PRODUK -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card border-0 shadow-lg rounded-4 bg-primary text-white">
+
+            <div class="card-body text-center p-5">
+
+                <h1>
+
+                    {{ total_products }}
+
+                </h1>
+
+                <h4>
+
+                    Total Produk
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOTAL PESANAN -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card border-0 shadow-lg rounded-4 bg-success text-white">
+
+            <div class="card-body text-center p-5">
+
+                <h1>
+
+                    {{ total_orders }}
+
+                </h1>
+
+                <h4>
+
+                    Total Pesanan
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOTAL USER -->
+
+    <div class="col-md-4 mb-4">
+
+        <div class="card border-0 shadow-lg rounded-4 bg-danger text-white">
+
+            <div class="card-body text-center p-5">
+
+                <h1>
+
+                    {{ total_users }}
+
+                </h1>
+
+                <h4>
+
+                    Total User
+
+                </h4>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="mt-5">
+
+    <a href="/admin/"
+    class="btn btn-dark btn-lg rounded-pill">
+
+        Masuk Admin Panel
+
+    </a>
+
+</div>
+
+{% endblock %}

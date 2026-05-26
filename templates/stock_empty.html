@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+
+    <h1 class="display-1 text-danger">
+
+        ❌
+
+    </h1>
+
+    <h2 class="fw-bold">
+
+        Stock Produk Habis
+
+    </h2>
+
+    <p class="text-muted">
+
+        Produk tidak tersedia saat ini
+
+    </p>
+
+    <a href="{% url 'home' %}"
+       class="btn btn-primary btn-lg">
+
+        Kembali
+
+    </a>
+
+</div>
+
+{% endblock %}

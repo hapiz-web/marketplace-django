@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="fw-bold mb-4">
+
+    Pesanan Saya
+
+</h2>
+
+<table class="table table-bordered shadow">
+
+    <thead class="table-dark">
+
+        <tr>
+
+            <th>Produk</th>
+            <th>Status</th>
+            <th>Tanggal</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for order in orders %}
+
+        <tr>
+
+            <td>
+
+                {{ order.product.name }}
+
+            </td>
+
+            <td>
+
+                {% if order.status == 'pending' %}
+
+                    <span class="badge bg-warning">
+
+                        Menunggu Verifikasi
+
+                    </span>
+
+                {% elif order.status == 'paid' %}
+
+                    <span class="badge bg-success">
+
+                        Pembayaran Berhasil
+
+                    </span>
+
+                {% elif order.status == 'rejected' %}
+
+                    <span class="badge bg-danger">
+
+                        Pembayaran Ditolak
+
+                    </span>
+
+                {% elif order.status == 'shipped' %}
+
+                    <span class="badge bg-primary">
+
+                        Dikirim
+
+                    </span>
+
+                {% else %}
+
+                    <span class="badge bg-dark">
+
+                        Selesai
+
+                    </span>
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                {{ order.created_at }}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

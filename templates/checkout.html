@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+    <div class="card border-0 shadow-lg">
+
+        <div class="card-body p-5">
+
+            <h2 class="fw-bold mb-4 text-center">
+                Pembayaran
+            </h2>
+
+            <img src="{{ product.image.url }}"
+                 class="img-fluid rounded mb-4">
+
+            <h3>{{ product.name }}</h3>
+
+            <h4 class="text-success mb-4">
+                Rp {{ product.price }}
+            </h4>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label>Nama Lengkap</label>
+
+                    <input type="text"
+                           class="form-control"
+                           required>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label>Alamat</label>
+
+                    <textarea class="form-control"></textarea>
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label>Metode Pembayaran</label>
+
+                    <select class="form-select">
+
+                        <option>Transfer Bank</option>
+
+                        <option>E-Wallet</option>
+
+                        <option>COD</option>
+
+                    </select>
+
+                </div>
+
+                <button class="btn btn-success btn-lg w-100">
+
+                    Bayar Sekarang
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}
