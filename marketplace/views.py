@@ -11,7 +11,8 @@ from .models import (
     Product,
     UserProfile,
     Order,
-    Review
+    Review,
+    Cart
 )
 
 
@@ -152,17 +153,16 @@ def dashboard(request):
         total_users = User.objects.count()
 
         pending_orders = Order.objects.filter(
-            status='pending'
+            status='Pending'
         ).count()
 
         paid_orders = Order.objects.filter(
-            status='paid'
+            status='Berhasil'
         ).count()
 
         rejected_orders = Order.objects.filter(
-            status='rejected'
+            status='Ditolak'
         ).count()
-
         return render(
             request,
             'admin_dashboard.html',
@@ -194,12 +194,12 @@ def dashboard(request):
 
         pending_orders = Order.objects.filter(
             product__seller=request.user,
-            status='pending'
+            status='Pending'
         ).count()
 
         paid_orders = Order.objects.filter(
             product__seller=request.user,
-            status='paid'
+            status='Berhasil'
         ).count()
 
         return render(
@@ -228,12 +228,12 @@ def dashboard(request):
 
         pending_orders = Order.objects.filter(
             buyer=request.user,
-            status='pending'
+            status='Pending'
         ).count()
 
         completed_orders = Order.objects.filter(
             buyer=request.user,
-            status='completed'
+            status='Berhasil'
         ).count()
 
         return render(
@@ -496,3 +496,169 @@ def my_orders(request):
     return render(request, 'my_orders.html', {
         'orders': orders
     })
+    
+# =========================================
+# ADD TO CART
+# =========================================
+
+@login_required
+def add_to_cart(request, pk):
+
+    product = get_object_or_404(
+        Product,
+        pk=pk
+    )
+
+    role = get_user_role(request.user)
+
+    # HANYA PEMBELI
+    if role != 'buyer':
+
+        messages.error(
+            request,
+            'Hanya pembeli yang bisa menambah keranjang!'
+        )
+
+        return redirect('home')
+
+    # CEK APAKAH PRODUK SUDAH ADA DI CART
+    cart_item, created = Cart.objects.get_or_create(
+        user=request.user,
+        product=product
+    )
+
+    # JIKA SUDAH ADA
+    if not created:
+
+        # TAMBAH QUANTITY
+        cart_item.quantity += 1
+
+        cart_item.save()
+
+    # NOTIF
+    messages.success(
+        request,
+        'Produk berhasil ditambahkan ke keranjang!'
+    )
+
+    # KEMBALI KE HOME
+    # BUKAN LANGSUNG KE PEMBAYARAN
+    return redirect('home')
+
+
+# =========================================
+# CART
+# =========================================
+
+@login_required
+def cart(request):
+
+    cart_items = Cart.objects.filter(
+        user=request.user
+    )
+
+    total = sum(
+        item.subtotal()
+        for item in cart_items
+    )
+
+    return render(
+        request,
+        'cart.html',
+        {
+            'cart_items': cart_items,
+            'total': total
+        }
+    )
+
+
+# =========================================
+# REMOVE FROM CART
+# =========================================
+
+@login_required
+def remove_from_cart(request, pk):
+
+    item = get_object_or_404(
+        Cart,
+        pk=pk,
+        user=request.user
+    )
+
+    item.delete()
+
+    messages.success(
+        request,
+        'Produk berhasil dihapus dari keranjang!'
+    )
+
+    return redirect('cart')
+
+
+# =========================================
+# CHECKOUT CART
+# =========================================
+
+@login_required
+def checkout_cart(request):
+
+    cart_items = Cart.objects.filter(
+        user=request.user
+    )
+
+    # JIKA KERANJANG KOSONG
+    if not cart_items.exists():
+
+        messages.error(
+            request,
+            'Keranjang kosong!'
+        )
+
+        return redirect('cart')
+
+    # LOOP SEMUA ITEM CART
+    for item in cart_items:
+
+        # CEK STOK
+        if item.quantity > item.product.stock:
+
+            messages.error(
+                request,
+                f'Stok {item.product.name} tidak mencukupi!'
+            )
+
+            return redirect('cart')
+
+        # HITUNG TOTAL
+        total_price = (
+            item.product.price *
+            item.quantity
+        )
+
+        # KURANGI STOK
+        item.product.stock -= item.quantity
+
+        item.product.save()
+
+        # BUAT ORDER
+        Order.objects.create(
+            buyer=request.user,
+            product=item.product,
+            quantity=item.quantity,
+            total_price=total_price,
+
+            # STATUS AWAL
+            status='Pending'
+        )
+
+    # HAPUS SEMUA CART SETELAH CHECKOUT
+    cart_items.delete()
+
+    # NOTIF
+    messages.success(
+        request,
+        'Pembayaran berhasil dibuat! Menunggu konfirmasi admin.'
+    )
+
+    # PINDAH KE PESANAN
+    return redirect('my_orders')

@@ -83,12 +83,27 @@
 
                         {% if user.userprofile.role == 'buyer' %}
 
-                        <a href="{% url 'checkout' product.id %}"
-                           class="btn btn-dark w-100 rounded-pill">
+                <div class="d-grid gap-2">
 
-                            Beli Sekarang
+                <!-- TOMBOL KERANJANG -->
 
-                        </a>
+                <a href="{% url 'add_to_cart' product.id %}"
+                class="btn btn-warning rounded-pill">
+
+                    🛒 Tambah Ke Keranjang
+
+                </a>
+
+                <!-- DETAIL PRODUK -->
+
+                <a href="{% url 'product_detail' product.id %}"
+                class="btn btn-outline-dark rounded-pill">
+
+                    Detail Produk
+
+                </a>
+
+            </div>
 
                         {% else %}
 

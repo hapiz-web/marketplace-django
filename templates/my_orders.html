@@ -2,96 +2,128 @@
 
 {% block content %}
 
-<h2 class="fw-bold mb-4">
+<div class="container mt-5">
 
-    Pesanan Saya
+    <h1 class="fw-bold mb-4">
+        Pesanan Saya
+    </h1>
 
-</h2>
+    <div class="card shadow border-0 rounded-4">
 
-<table class="table table-bordered shadow">
+        <div class="table-responsive">
 
-    <thead class="table-dark">
+            <table class="table align-middle mb-0">
 
-        <tr>
+                <thead class="table-dark">
 
-            <th>Produk</th>
-            <th>Status</th>
-            <th>Tanggal</th>
+                    <tr>
 
-        </tr>
+                        <th>Produk</th>
+                        <th>Jumlah</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
 
-    </thead>
+                    </tr>
 
-    <tbody>
+                </thead>
 
-        {% for order in orders %}
+                <tbody>
 
-        <tr>
+                    {% for order in orders %}
 
-            <td>
+                    <tr>
 
-                {{ order.product.name }}
+                        <td>
 
-            </td>
+                            {{ order.product.name }}
 
-            <td>
+                        </td>
 
-                {% if order.status == 'pending' %}
+                        <td>
 
-                    <span class="badge bg-warning">
+                            {{ order.quantity }}
 
-                        Menunggu Verifikasi
+                        </td>
 
-                    </span>
+                        <td>
 
-                {% elif order.status == 'paid' %}
+                            Rp {{ order.total_price }}
 
-                    <span class="badge bg-success">
+                        </td>
 
-                        Pembayaran Berhasil
+                        <td>
 
-                    </span>
+                            {% if order.status == 'Pending' %}
 
-                {% elif order.status == 'rejected' %}
+                                <span class="badge bg-warning text-dark">
 
-                    <span class="badge bg-danger">
+                                    Pending
 
-                        Pembayaran Ditolak
+                                </span>
 
-                    </span>
+                            {% elif order.status == 'Diproses' %}
 
-                {% elif order.status == 'shipped' %}
+                                <span class="badge bg-primary">
 
-                    <span class="badge bg-primary">
+                                    Diproses
 
-                        Dikirim
+                                </span>
 
-                    </span>
+                            {% elif order.status == 'Berhasil' %}
 
-                {% else %}
+                                <span class="badge bg-success">
 
-                    <span class="badge bg-dark">
+                                    Berhasil
 
-                        Selesai
+                                </span>
 
-                    </span>
+                            {% elif order.status == 'Ditolak' %}
 
-                {% endif %}
+                                <span class="badge bg-danger">
 
-            </td>
+                                    Ditolak
 
-            <td>
+                                </span>
 
-                {{ order.created_at }}
+                            {% endif %}
 
-            </td>
+                        </td>
 
-        </tr>
+                        <td>
 
-        {% endfor %}
+                            {{ order.created_at }}
 
-    </tbody>
+                        </td>
 
-</table>
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="5">
+
+                            <div class="alert alert-danger mb-0">
+
+                                Belum ada pesanan.
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

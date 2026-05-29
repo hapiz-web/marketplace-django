@@ -28,5 +28,29 @@ urlpatterns = [
     views.product_detail,
     name='product_detail'
     ),
+    
+    path(
+    'add-to-cart/<int:pk>/',
+    views.add_to_cart,
+    name='add_to_cart'
+    ),
+
+    path(
+    'cart/',
+    views.cart,
+    name='cart'
+    ),
+
+    path(
+    'remove-cart/<int:pk>/',
+    views.remove_from_cart,
+    name='remove_from_cart'
+    ),
+
+    path(
+    'checkout-cart/',
+    views.checkout_cart,
+    name='checkout_cart'
+    ),
 
 ]
