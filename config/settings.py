@@ -7,7 +7,11 @@ SECRET_KEY = 'django-insecure-l%zg+#$31+y76_z=-8)=b&31o=yaeg0-do^a5utv@nce_b7krm
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'hapiz.pythonanywhere.com'
+]
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -97,13 +101,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_URL = '/login/'
+MEDIA_ROOT = BASE_DIR / 'media'
